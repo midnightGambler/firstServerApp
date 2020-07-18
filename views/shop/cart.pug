@@ -1,4 +1,18 @@
 extends ../layouts/main-layout
 
 block content
-  h1.centered Cart Page
+  main
+    h1.centered Cart Page
+    if cartProducts.length > 0
+      ul
+        for product in cartProducts
+          li
+            p #{product.title} (#{product.qty})
+            form.btn-form(action='/cart-delete-item' method='POST')
+              input(type='hidden' name='productID' value=`${product.productID}`)
+              button.btn-form__btn(type='submit') Remove item
+      hr
+      h3 Total $#{totalPrice}
+    else
+      hr
+      h3.centered Cart is empty

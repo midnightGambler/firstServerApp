@@ -5,12 +5,24 @@ const fs = require("fs");
 const dataPath = path.join(rootDir, "data", "cart.json");
 
 module.exports = class Cart {
+  static getCart() {
+    return new Promise((res) => {
+      fs.readFile(dataPath, (err, fileContent) => {
+        if (err) {
+          throw new Error();
+        }
+        res(JSON.parse(fileContent));
+      });
+    });
+  }
+
   static addProduct(id, price) {
     fs.readFile(dataPath, (err, fileContent) => {
       let cart = {
         products: [],
         totalPrice: 0,
       };
+
       if (!err) {
         cart = JSON.parse(fileContent);
       }
@@ -36,11 +48,21 @@ module.exports = class Cart {
     });
   }
 
-  static deleteProduct(id) {
-    fs.readFile(dataPath, (cart) => {
-      const updatedCart = cart.filter((product) => product.productID !== id);
+  static deleteProduct(id, price) {
+    fs.readFile(dataPath, (err, fileContent) => {
+      if (err) return;
 
-      fs.writeFile(dataPath, JSON.stringify(updatedCart), (err) => {
+      const cart = JSON.parse(fileContent);
+
+      cart.products = cart.products.filter((product) => {
+        if (product.productID === id) {
+          cart.totalPrice = cart.totalPrice - product.qty * price;
+          return false;
+        }
+        return true;
+      });
+
+      fs.writeFile(dataPath, JSON.stringify(cart), (err) => {
         console.log(err);
       });
     });
