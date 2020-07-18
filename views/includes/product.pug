@@ -1,0 +1,12 @@
+article.card.product-item
+  header.card__header
+    h1.product__title #{product.title}
+  .card__image
+    img(src=product.imageUrl alt="")
+  .card__content
+    h2.product__price $#{product.price}
+    p.product__description #{product.description}
+  if path.includes('/admin')
+    include ./admin-product-actions
+  else
+    include ./product-actions

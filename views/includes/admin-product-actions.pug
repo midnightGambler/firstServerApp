@@ -1,0 +1,5 @@
+.card__actions
+  a.btn.btn--link.btn--card-action-btn(href=`/admin/edit-product/${product.productID}`) Edit
+  form.btn-form.btn-form--action(action='/admin/delete-product' method='POST')
+    input(type='hidden' value=`${product.productID}` name='productID')
+    button.btn-form__btn(type='submit') Delete

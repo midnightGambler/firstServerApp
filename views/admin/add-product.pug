@@ -1,0 +1,23 @@
+extends ../layouts/main-layout.pug
+
+block styles
+  link(rel="stylesheet" href="/css/add-product.css")
+
+block content
+  main
+    form.product-form.product-form--centered(action=`/admin${isEdit ? '/edit-product' : "/add-product"}` method="POST")
+      .form-control
+        label(for="title") Title
+        input(type="text" id="title", value=`${title || ''}` required, autocomplete="off" name="title")
+      .form-control
+        label(for="imageUrl") Image
+        input(type="text" id="imageUrl", value=`${imageUrl || ''}`, required, autocomplete="off" name="imageUrl")
+      .form-control
+        label(for="price") Price
+        input(type="number" id="price", value=`${price || ''}`, required, autocomplete="off" name="price")
+      .form-control
+        label(for="description") Description
+        textarea(id="description" maxlength='41' rows='5', required, autocomplete="off" name="description") #{description}
+      if isEdit
+        input(type="hidden" name='productID' value=`${productID}`)
+      button.btn.btn--lg(type="submit") Submit

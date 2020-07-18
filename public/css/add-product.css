@@ -1,0 +1,31 @@
+.product-form--centered {
+  width: 20rem;
+  max-width: 90%;
+  margin: auto;
+}
+
+.form-control {
+  margin: 1rem 0;
+}
+
+.form-control label,
+.form-control input {
+  width: 100%;
+  display: block;
+}
+
+.form-control input,
+.form-control textarea {
+  border: 2px solid #f2f2f2;
+  border-radius: 0.25rem;
+  padding: 0.5rem 0.5rem;
+}
+
+.form-control textarea {
+  width: 100%;
+}
+
+.form-control input:focus,
+.form-control textarea:focus {
+  outline: 2px solid rgb(218, 253, 22);
+}

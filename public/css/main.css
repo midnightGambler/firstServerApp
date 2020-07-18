@@ -1,0 +1,182 @@
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #fafafa;
+}
+
+main {
+  padding: 1rem;
+}
+
+.main-header {
+  width: 100%;
+  height: 3.5rem;
+  background-color: rgb(218, 253, 22);
+  padding: 0 1.5rem;
+}
+
+.main-header__nav {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.mobile-nav {
+  display: none;
+  width: 10rem;
+  height: 100vh;
+  position: fixed;
+  background: #fff;
+  transform: translateX(-100%);
+  transition: 0.3s transform ease-in-out;
+}
+
+.backdrop {
+  /* creates shadow on whole page when mobile menu is open & handle closing menu on click outside menu */
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 3.5rem;
+  background-color: rgba(34, 34, 34, 0.3);
+  display: none;
+}
+
+.backdrop.active {
+  display: block;
+}
+
+.mobile-nav-toggler {
+  width: 1.5rem;
+  height: 100%;
+  display: none;
+}
+
+.mobile-nav.open {
+  transform: translateX(0);
+}
+
+.mobile-nav__item-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-nav__item a {
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  display: block;
+  color: #222;
+}
+
+.mobile-nav__item .active {
+  background: rgb(218, 253, 22);
+}
+
+@media (max-width: 48rem) {
+  .main-header__nav {
+    display: none;
+  }
+  .mobile-nav {
+    display: block;
+  }
+  .mobile-nav-toggler {
+    display: initial;
+  }
+}
+
+.main-header__item-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+}
+.main-header__item {
+  margin: 0 1rem;
+}
+
+.main-header__item a {
+  text-decoration: none;
+  color: #222;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.main-header__item a:hover,
+.main-header__item a:active,
+.main-header__item a.active {
+  background-color: #222;
+  color: #dafd16;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+.btn {
+  background-color: rgb(218, 253, 22);
+  border-radius: 0.25rem;
+  border: none;
+  display: inline;
+  font-size: inherit;
+  line-height: 18px;
+  font-size: 14px;
+}
+
+.btn--card-action-btn {
+  flex: 1;
+  padding: 0.5rem 0;
+}
+
+.btn--card-action-btn:not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+.btn--link {
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.btn--lg {
+  padding: 0.5rem 1rem;
+}
+
+.btn-form {
+  border-radius: 0.25rem;
+  display: inline-block;
+}
+
+.btn-form,
+.btn-form__btn {
+  cursor: pointer;
+}
+
+.btn-form__btn {
+  background: #dafd16;
+  line-height: 18px;
+  border: none;
+  width: 100%;
+  font-size: 14px;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+}
+
+.btn-form--action {
+  flex: 1;
+}
+
+.btn-form--action .btn-form__btn {
+  padding: 0.5rem 0;
+}
+
+.btn:hover {
+  cursor: pointer;
+}
+
+.centered {
+  text-align: center;
+}

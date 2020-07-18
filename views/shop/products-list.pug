@@ -1,0 +1,13 @@
+extends ../layouts/main-layout.pug
+
+block styles
+  link(rel="stylesheet" href="/css/product.css")
+
+block content
+  main
+    if products.length > 0
+      .grid
+        each product in products
+          include ../includes/product
+    else
+      h1.centered Products not found

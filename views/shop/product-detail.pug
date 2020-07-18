@@ -1,0 +1,12 @@
+extends ../layouts/main-layout
+
+block content
+  main.centered
+    h1 #{title}
+    hr
+    div
+      img(src=`${imageUrl}`)
+    h2 #{price}
+    p #{description}
+    form.btn-form(action='/add-to-cart' method='POST')
+      button.btn-form__btn(type='submit') Add to Cart
