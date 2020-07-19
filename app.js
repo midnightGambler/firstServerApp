@@ -10,6 +10,7 @@ const shopRoutes = require("./routes/shop");
 
 // importing controlles
 const { get404 } = require("./controllers/error");
+const sequelize = require("./utils/database");
 
 // configuring server & express
 const app = express();
@@ -29,4 +30,10 @@ app.use(shopRoutes);
 // handling 404
 app.use(get404);
 
-app.listen(3000);
+// Creating database
+sequelize
+  .sync()
+  .then((_) => {
+    app.listen(3000);
+  })
+  .catch((err) => console.log(err));

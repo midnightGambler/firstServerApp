@@ -21,11 +21,11 @@ exports.getAdminProducts = (req, res) => {
 
 exports.getProducts = (req, res) => {
   Product.fetchProducts()
-    .then((products) => {
+    .then(([rows, fieldsData]) => {
       res.render("shop/products-list", {
         docTitle: "Shop",
         path: "/products",
-        products,
+        products: rows,
       });
     })
     .catch((err) => {
@@ -40,14 +40,16 @@ exports.getProducts = (req, res) => {
 exports.getProduct = (req, res, next) => {
   const { productID } = req.params;
   Product.findById(productID)
-    .then((product) => {
+    .then(([product]) => {
       res.render("shop/product-detail", {
         docTitle: product.title,
         path: "/products",
-        ...product,
+        ...product[0],
       });
     })
-    .catch((_) => next());
+    .catch((err) => {
+      next();
+    });
 };
 
 exports.getCart = (req, res) => {
@@ -106,14 +108,15 @@ exports.getCheckout = (req, res) => {
 
 exports.getIndex = (req, res) => {
   Product.fetchProducts()
-    .then((products) => {
+    .then(([rows, fieldData]) => {
       res.render("shop/products-list", {
         docTitle: "Shop",
         path: "/",
-        products,
+        products: rows,
       });
     })
     .catch((err) => {
+      console.log(err);
       res.render("shop/products-list", {
         docTitle: "Shop",
         path: "/",
