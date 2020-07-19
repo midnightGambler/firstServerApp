@@ -9,9 +9,7 @@ exports.getAddProduct = (req, res) => {
 
 exports.postAddProduct = (req, res, next) => {
   const { title, imageUrl, description, price } = req.body;
-  const product = new Product(title, imageUrl, description, price);
-  product
-    .save()
+  Product.create({ title, imageUrl, description, price })
     .then((_) => {
       res.redirect("/");
     })
@@ -20,30 +18,36 @@ exports.postAddProduct = (req, res, next) => {
 
 exports.getEditProduct = (req, res, next) => {
   const { id } = req.params;
-  Product.findById(id).then((product) =>
-    res.render("admin/add-product", { ...product, isEdit: true })
-  );
+  Product.findByPk(id)
+    .then(({ dataValues: product }) =>
+      res.render("admin/add-product", { ...product, isEdit: true })
+    )
+    .catch((_) => next());
 };
 
 exports.postEditProduct = (req, res, next) => {
-  const { title, imageUrl, description, price, productID } = req.body;
-  Product.updateProduct(productID, {
-    title,
-    imageUrl,
-    description,
-    price,
-  });
-  res.redirect("/admin/products");
+  const { title, imageUrl, description, price, id } = req.body;
+  Product.findByPk(id)
+    .then((product) => {
+      return product.update({ title, imageUrl, description, price });
+    })
+    .then((_) => {
+      res.redirect("/admin/products");
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.postDeleteProduct = (req, res, next) => {
-  const { productID } = req.body;
-  Product.remove(productID);
-  res.redirect("/admin/products");
+  const { id } = req.body;
+  Product.destroy({ where: { id } })
+    .then((_) => {
+      res.redirect("/admin/products");
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.getAdminProducts = (req, res) => {
-  Product.fetchProducts()
+  Product.findAll()
     .then((products) => {
       res.render("admin/products-list", {
         docTitle: "Admin Products",

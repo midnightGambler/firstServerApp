@@ -19,5 +19,5 @@ block content
         label(for="description") Description
         textarea(id="description" maxlength='41' rows='5', required, autocomplete="off" name="description") #{description}
       if isEdit
-        input(type="hidden" name='productID' value=`${productID}`)
+        input(type="hidden" name='id' value=`${id}`)
       button.btn.btn--lg(type="submit") Submit
