@@ -12,8 +12,9 @@ block content
           li.cart-item
             p.cart-item__title #{product.title} (#{product.cartItem.quantity})
             form.btn-form(action='/cart-delete-item' method='POST')
-              input(type='hidden' name='productID' value=`${product.productID}`)
-              button.btn-form__btn(type='submit') Remove item
+              input(type='hidden' name='id' value=`${product.id}`)
+              button.btn--icon.btn-form__btn(type='submit')
+                include ../includes/svg/cross
       hr
       h3 Total $#{totalPrice}
     else

@@ -124,6 +124,7 @@ main {
   font-size: inherit;
   line-height: 18px;
   font-size: 14px;
+  cursor: pointer;
 }
 
 .btn--card-action-btn {
@@ -173,8 +174,12 @@ main {
   padding: 0.5rem 0;
 }
 
-.btn:hover {
-  cursor: pointer;
+.btn--icon {
+  line-height: 1;
+}
+
+.btn--icon svg {
+  vertical-align: middle;
 }
 
 .centered {
