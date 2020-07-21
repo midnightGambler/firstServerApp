@@ -41,11 +41,11 @@ exports.getProducts = (req, res) => {
 exports.getProduct = (req, res, next) => {
   const { productID } = req.params;
   Product.findByPk(productID)
-    .then(({ dataValues: product }) => {
+    .then((product) => {
       res.render("shop/product-detail", {
         docTitle: product.title,
         path: "/products",
-        ...product,
+        product,
       });
     })
     .catch((err) => {
@@ -54,34 +54,64 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getCart = (req, res) => {
-  Cart.getCart().then((cart) => {
-    Product.fetchProducts().then((products) => {
-      const cartProducts = cart.products.map((cartProduct) => {
-        const productInfo = products.find(
-          (product) => product.productID === cartProduct.productID
-        );
-        return { ...cartProduct, ...productInfo };
-      });
+  req.user
+    .getCart()
+    .then((cart) => cart.getProducts())
+    .then((products) => {
       res.render("shop/cart", {
         path: "/cart",
         docTitle: "Cart",
-        cartProducts,
-        totalPrice: cart.totalPrice,
+        cartProducts: products,
+        totalPrice: 0,
       });
-    });
-  });
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.postCart = (req, res) => {
-  const { productID } = req.body;
+  const { id } = req.body;
 
-  Product.findById(productID).then((product) => {
-    const price = product.price;
+  let userCart;
+  let newQuantity;
 
-    Cart.addProduct(productID, price);
+  req.user
+    .getCart()
+    .then((cart) => {
+      userCart = cart;
+      return cart.getProducts({ where: { id } });
+    })
+    .then((products) => {
+      let product;
+      newQuantity = 1;
 
-    res.redirect("/cart");
-  });
+      if (products.length > 0) {
+        product = products[0];
+      }
+
+      if (product) {
+        newQuantity = product.cartItem.quantity + 1;
+        return product;
+      }
+
+      return Product.findByPk(id);
+    })
+    .then((product) => {
+      return userCart.addProduct(product, {
+        through: { quantity: newQuantity },
+      });
+    })
+    .then((_) => {
+      res.redirect("/cart");
+    })
+    .catch((err) => console.log("ADDING PRODUCT TO CART ERROR: ", err));
+
+  // Product.findById(productID).then((product) => {
+  //   const price = product.price;
+
+  //   Cart.addProduct(productID, price);
+
+  //   res.redirect("/cart");
+  // });
 };
 
 exports.postCartDeleteItem = (req, res) => {

@@ -4,12 +4,14 @@ exports.getAddProduct = (req, res) => {
   res.render("admin/add-product", {
     docTitle: "Add Product",
     path: "/admin/add-product",
+    product: {},
   });
 };
 
 exports.postAddProduct = (req, res, next) => {
   const { title, imageUrl, description, price } = req.body;
-  Product.create({ title, imageUrl, description, price })
+  req.user
+    .createProduct({ title, imageUrl, description, price })
     .then((_) => {
       res.redirect("/");
     })
@@ -18,10 +20,11 @@ exports.postAddProduct = (req, res, next) => {
 
 exports.getEditProduct = (req, res, next) => {
   const { id } = req.params;
-  Product.findByPk(id)
-    .then(({ dataValues: product }) =>
-      res.render("admin/add-product", { ...product, isEdit: true })
-    )
+  req.user
+    .getProducts({ where: { id } })
+    .then(([product]) => {
+      res.render("admin/add-product", { product, isEdit: true });
+    })
     .catch((_) => next());
 };
 
@@ -47,7 +50,8 @@ exports.postDeleteProduct = (req, res, next) => {
 };
 
 exports.getAdminProducts = (req, res) => {
-  Product.findAll()
+  req.user
+    .getProducts()
     .then((products) => {
       res.render("admin/products-list", {
         docTitle: "Admin Products",

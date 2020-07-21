@@ -8,16 +8,16 @@ block content
     form.product-form.product-form--centered(action=`/admin${isEdit ? '/edit-product' : "/add-product"}` method="POST")
       .form-control
         label(for="title") Title
-        input(type="text" id="title", value=`${title || ''}` required, autocomplete="off" name="title")
+        input(type="text" id="title", value=`${product.title || ''}` required, autocomplete="off" name="title")
       .form-control
         label(for="imageUrl") Image
-        input(type="text" id="imageUrl", value=`${imageUrl || ''}`, required, autocomplete="off" name="imageUrl")
+        input(type="text" id="imageUrl", value=`${product.imageUrl || ''}`, required, autocomplete="off" name="imageUrl")
       .form-control
         label(for="price") Price
-        input(type="number" id="price", value=`${price || ''}`, required, autocomplete="off" name="price")
+        input(type="number" id="price", value=`${product.price || ''}`, required, autocomplete="off" name="price")
       .form-control
         label(for="description") Description
-        textarea(id="description" maxlength='41' rows='5', required, autocomplete="off" name="description") #{description}
+        textarea(id="description" maxlength='41' rows='5', required, autocomplete="off" name="description") #{product.description}
       if isEdit
-        input(type="hidden" name='id' value=`${id}`)
+        input(type="hidden" name='id' value=`${product.id}`)
       button.btn.btn--lg(type="submit") Submit

@@ -2,11 +2,11 @@ extends ../layouts/main-layout
 
 block content
   main.centered
-    h1 #{title}
+    h1 #{product.title}
     hr
     div
-      img(src=`${imageUrl}`)
-    h2 $#{price}
-    p #{description}
+      img(src=`${product.imageUrl}`)
+    h2 $#{product.price}
+    p #{product.description}
     form.btn-form(action='/add-to-cart' method='POST')
       button.btn-form__btn(type='submit') Add to Cart

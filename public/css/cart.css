@@ -1,0 +1,24 @@
+.cart-list {
+  width: 100%;
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 0;
+  margin-bottom: 3rem;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  box-shadow: 0px 2px 2px 2px #f2efef;
+  background: #fff;
+}
+
+.cart-item__title {
+  margin: 0;
+}
+
+.cart-item:not(:last-child) {
+  margin-bottom: 0.5rem;
+}

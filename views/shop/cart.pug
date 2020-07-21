@@ -1,13 +1,16 @@
 extends ../layouts/main-layout
 
+block styles
+  link(rel="stylesheet" href='/css/cart.css')
+
 block content
   main
     h1.centered Cart Page
     if cartProducts.length > 0
-      ul
+      ul.cart-list
         for product in cartProducts
-          li
-            p #{product.title} (#{product.qty})
+          li.cart-item
+            p.cart-item__title #{product.title} (#{product.cartItem.quantity})
             form.btn-form(action='/cart-delete-item' method='POST')
               input(type='hidden' name='productID' value=`${product.productID}`)
               button.btn-form__btn(type='submit') Remove item
