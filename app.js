@@ -17,6 +17,8 @@ const Product = require("./models/product");
 const User = require("./models/user");
 const Cart = require("./models/cart");
 const CartItem = require("./models/cart-item");
+const Order = require("./models/order");
+const OrderItem = require("./models/order-item");
 
 // configuring relations between models
 Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
@@ -25,6 +27,10 @@ User.hasMany(Product);
 User.hasOne(Cart);
 Cart.belongsTo(User);
 Cart.belongsToMany(Product, { through: CartItem });
+Order.belongsToMany(Product, { through: OrderItem });
+Product.belongsToMany(Order, { through: OrderItem });
+Order.belongsTo(User);
+User.hasMany(Order);
 
 // configuring server & express
 const app = express();
@@ -56,7 +62,7 @@ app.use(get404);
 
 // Creating database
 sequelize
-  .sync()
+  .sync({ forse: true })
   .then(() => {
     return User.findByPk(1);
   })
@@ -67,10 +73,13 @@ sequelize
     }
     return res;
   })
-  // .then((user) => {
-
-  //   return user.createCart();
-  // })
+  .then((user) => user.getCart())
+  .then((cart) => {
+    if (!cart) {
+      console.log("creating Cart");
+      return user.createCart();
+    }
+  })
   .then(() => {
     app.listen(3000);
   })

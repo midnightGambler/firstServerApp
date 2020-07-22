@@ -4,7 +4,7 @@ block styles
   link(rel="stylesheet" href='/css/cart.css')
 
 block content
-  main
+  main.container
     h1.centered Cart Page
     if cartProducts.length > 0
       ul.cart-list
@@ -16,7 +16,10 @@ block content
               button.btn--icon.btn-form__btn(type='submit')
                 include ../includes/svg/cross
       hr
-      h3 Total $#{totalPrice}
+      .flex-row
+        h3 Total $#{totalPrice}
+        form.btn-form(action='/create-order' method='POST')
+          button.btn-form__btn(type='submit') Create order
     else
       hr
       h3.centered Cart is empty

@@ -1,4 +1,14 @@
 extends ../layouts/main-layout
 
 block content
-  h1.centered Orders page
+  main
+    h1.centered Orders page
+    if orders.length > 0
+      for order in orders
+        h3 #{order.id}
+        ul
+          for product in order.products
+            li #{product.title} (#{product.orderItem.quantity})
+        hr
+    else
+      h1.centered No orders found

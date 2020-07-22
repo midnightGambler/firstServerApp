@@ -185,3 +185,9 @@ main {
 .centered {
   text-align: center;
 }
+
+.flex-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

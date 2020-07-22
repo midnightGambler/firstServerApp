@@ -1,5 +1,4 @@
 const Product = require("../models/product");
-const Cart = require("../models/cart");
 
 exports.getAdminProducts = (req, res) => {
   Product.fetchProducts()
@@ -65,7 +64,14 @@ exports.getCart = (req, res) => {
         totalPrice: 0,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      res.render("shop/cart", {
+        path: "/cart",
+        docTitle: "Cart",
+        cartProducts: [],
+        totalPrice: 0,
+      });
+    });
 };
 
 exports.postCart = (req, res) => {
@@ -104,14 +110,6 @@ exports.postCart = (req, res) => {
       res.redirect("/cart");
     })
     .catch((err) => console.log("ADDING PRODUCT TO CART ERROR: ", err));
-
-  // Product.findById(productID).then((product) => {
-  //   const price = product.price;
-
-  //   Cart.addProduct(productID, price);
-
-  //   res.redirect("/cart");
-  // });
 };
 
 exports.postCartDeleteItem = (req, res) => {
@@ -128,10 +126,47 @@ exports.postCartDeleteItem = (req, res) => {
 };
 
 exports.getOrders = (req, res) => {
-  res.render("shop/orders", {
-    path: "/orders",
-    docTitle: "Orders",
-  });
+  req.user
+    .getOrders({ include: ["products"] })
+    .then((orders) => {
+      console.log(orders);
+      res.render("shop/orders", {
+        path: "/orders",
+        docTitle: "Orders",
+        orders,
+      });
+    })
+    .catch((err) => console.log("ERROR WHILE FETCHING ORDERS: ", err));
+};
+
+exports.postOrder = (req, res) => {
+  console.log("creating order");
+  let cartProducts;
+  let userCart;
+  req.user
+    .getCart()
+    .then((cart) => {
+      userCart = cart;
+      return cart.getProducts();
+    })
+    .then((products) => {
+      cartProducts = products;
+      return req.user.createOrder();
+    })
+    .then((order) =>
+      order.addProducts(
+        cartProducts.map((product) => {
+          console.log(product.cartItem.quantity);
+          product.orderItem = { quantity: product.cartItem.quantity };
+          return product;
+        })
+      )
+    )
+    .then((_) => userCart.setProducts(null))
+    .then(() => res.redirect("/orders"))
+    .catch((err) => {
+      console.log("ERROR WHILE CREATING ORDER: ", err);
+    });
 };
 
 exports.getCheckout = (req, res) => {
